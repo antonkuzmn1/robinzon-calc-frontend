@@ -1,0 +1,49 @@
+@import ../constants
+
+section
+  box-shadow: $shadow
+  background-color: $color_brand
+  overflow-x: auto
+  overflow-y: hidden
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  z-index: 1
+
+  nav
+    margin-left: auto
+    margin-right: auto
+    width: min-content
+    height: $height_medium
+    display: flex
+
+    a
+      align-items: center
+      position: relative
+      display: flex
+      justify-content: center
+      text-decoration: none
+      font-family: $font_family
+      cursor: pointer
+      padding: 0 20px
+      width: $width_medium
+      font-size: $font_size_large
+      color: $color_font
+      white-space: nowrap
+      user-select: none
+
+      transition: background-color 300ms ease-out
+
+      &:hover
+        background-color: $color_brand_dark
+
+      &:focus
+        outline: none
+        background-color: $color_brand_dark
+
+      &:active
+        background-color: $color_brand_darker
+
+      &.active
+        background-color: $color_brand_darker

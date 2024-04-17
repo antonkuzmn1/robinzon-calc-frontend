@@ -1,0 +1,64 @@
+<section>
+    <div class="table-container">
+        <table class="header">
+            <tr>
+                <th class="small">ID</th>
+                <th class="medium">Title</th>
+                <th class="medium">Client</th>
+                <th class="medium">Domain</th>
+                <th class="medium">Subnet</th>
+                <th class="medium">Mask</th>
+                <th class="medium">Dns1</th>
+                <th class="medium">Dns2</th>
+                <th class="small">Cloud</th>
+                <th class="button"><button (click)="openModal('new')">New</button></th>
+            </tr>
+        </table>
+        <table class="content">
+            <tr *ngFor="let n of netTable" class="row" [class.selected]="n.isHovered">
+                <td class="small">{{n.netId}}</td>
+                <td class="medium">{{n.netTitle}}</td>
+                <td class="medium">{{n.clientName}}</td>
+                <td class="medium">{{n.netDomain}}</td>
+                <td class="medium">{{n.netSubnet}}</td>
+                <td class="medium">{{n.netMask}}</td>
+                <td class="medium">{{n.netDns1}}</td>
+                <td class="medium">{{n.netDns2}}</td>
+                <td class="small">{{n.netCloud ? 'TRUE' : 'FALSE' }}</td>
+                <td class="button"><button (click)="openModal(n.netId.toString())" (mouseenter)="n.isHovered = true" (mouseleave)="n.isHovered = false">Edit</button></td>
+            </tr>
+        </table>
+    </div>
+    <app-modal>
+        <div (click)="closeModal()" class="modal-background"></div>
+        <div class="modal-body">
+          <table>
+            <tr *ngIf="netModal.netId !== 0"><th>netId</th><td>{{netModal.netId}}</td></tr>
+            <tr (click)="openClientDd()"><th>clientName</th><td>{{netModal.clientName}}</td></tr>
+            <tr [hidden]="!clientActiveDD">
+              <th>clientList</th>
+              <button (click)="setClient()">-</button>
+              <button *ngFor="let client of clientDd" (click)="setClient(client.clientId, client.clientName)">{{client.clientName}}</button>
+            </tr>
+            <tr><th><label for="net-domain">netDomain</label></th><td><input id="net-domain" [(ngModel)]="netModal.netDomain" maxlength="50"></td></tr>
+            <tr><th><label for="net-subnet">netSubnet</label></th><td><input id="net-subnet" [(ngModel)]="netModal.netSubnet" maxlength="15"></td></tr>
+            <tr><th><label for="net-mask">netMask</label></th><td><input id="net-mask" [(ngModel)]="netModal.netMask" maxlength="15"></td></tr>
+            <tr><th><label for="net-dns1">netDns1</label></th><td><input id="net-dns1" [(ngModel)]="netModal.netDns1" maxlength="15"></td></tr>
+            <tr><th><label for="net-dns2">netDns2</label></th><td><input id="net-dns2" [(ngModel)]="netModal.netDns2" maxlength="15"></td></tr>
+            <tr><th><label for="net-dns3">netDns3</label></th><td><input id="net-dns3" [(ngModel)]="netModal.netDns3" maxlength="15"></td></tr>
+            <tr><th><label for="net-cloud">netCloud</label></th><td><input style="width: 20px" id="net-cloud" type="checkbox" [(ngModel)]="netModal.netCloud"></tr>
+            <tr><th><label for="net-title">netTitle</label></th><td><input id="net-title" [(ngModel)]="netModal.netTitle" maxlength="50"></td></tr>
+            <tr><th><label for="net-descr">netDescr</label></th><td><textarea id="net-descr" [(ngModel)]="netModal.netDescr" maxlength="255">{{netModal.netDescr}}</textarea></td></tr>
+          </table>
+        </div>
+        <div *ngIf="netModal.netId === 0" class="modal-buttons">
+            <button (click)="newNet()">Add</button>
+            <button (click)="closeModal()">Cancel</button>
+        </div>
+        <div *ngIf="netModal.netId !== 0" class="modal-buttons">
+            <button (click)="editNet()">Save</button>
+            <button (click)="delNet()">{{delButtonText}}</button>
+            <button (click)="closeModal()">Close</button>
+        </div>
+    </app-modal>
+</section>

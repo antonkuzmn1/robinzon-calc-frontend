@@ -1,0 +1,175 @@
+<section>
+    <div class="table-container">
+        <table class="header">
+            <tr>
+                <th class="medium" (click)="filterState()">Title</th>
+                <th class="medium" (click)="filterState()">Client</th>
+                <th class="large" (click)="filterState()">Name</th>
+                <th class="small" (click)="filterState()">Server</th>
+                <th class="small" (click)="filterState()">CPU</th>
+                <th class="small" (click)="filterState()">RAM</th>
+                <th class="small" (click)="filterState()">SSD</th>
+                <th class="small" (click)="filterState()">HDD</th>
+                <th class="small" (click)="filterState()">State</th>
+                <th class="small" (click)="filterState()">Price</th>
+                <th class="button"><button (click)="openModal('settings')">Settings</button></th>
+            </tr>
+            <tr [hidden]="!filterIsOpened" class="filter">
+                <td class="medium"><input [(ngModel)]="tempTitle" (change)="filterTitleChange()"></td>
+                <td class="medium">
+                    <div class="checkbox">
+                        <label><input type="checkbox" [checked]="filterClientCheck(0)"
+                                (change)="filterClientChange(0)">null</label>
+                        <label *ngFor="let c of clientDd">
+                            <input type="checkbox" [checked]="filterClientCheck(c.clientId)"
+                                (change)="filterClientChange(c.clientId)">{{c.clientName}}
+                        </label>
+                    </div>
+                </td>
+                <td class="large"><input [(ngModel)]="tempName" (change)="filterNameChange()"></td>
+                <td class="small">
+                    <div class="checkbox">
+                        <label *ngFor="let f of fmDd">
+                            <input type="checkbox" [checked]="filterFmCheck(f.fmId)"
+                                (change)="filterFmChange(f.fmId)">{{f.fmName}}
+                        </label>
+                    </div>
+                </td>
+                <td class="small"></td>
+                <td class="small"></td>
+                <td class="small"></td>
+                <td class="small"></td>
+                <td class="small"></td>
+                <td class="small">
+                    <label><input type="checkbox" [checked]="filterRunning(false)"
+                            (change)="filterRunning(true)">Running</label>
+                    <label><input type="checkbox" [checked]="filterOff(false)"
+                            (change)="filterOff(true)">Off</label>
+                </td>
+                <td class="button"><button (click)="getTable()">Update</button></td>
+            </tr>
+        </table>
+        <table class="content">
+            <tr *ngFor="let vm of vmTable" class="row" [class.selected]="vm.isHovered">
+                <td class="medium">{{vm.vmTitle}}</td>
+                <td class="medium">{{vm.clientName}}</td>
+                <td class="large">{{vm.vmName}}</td>
+                <td class="small">{{vm.fmName}}</td>
+                <td class="small">{{vm.vmCpu}} Cores</td>
+                <td class="small">{{vm.vmRam}} GB</td>
+                <td class="small">{{vm.vmSsd}} GB</td>
+                <td class="small">{{vm.vmHdd}} GB</td>
+                <td class="small">{{vm.vmState ? 'Running' : 'Off'}}</td>
+                <td class="small">{{vm.vmCpu*vmPrice.cpu*vmPrice.cpuC + vm.vmRam*vmPrice.ram*vmPrice.ramC +
+                    vm.vmSsd*vmPrice.ssd*vmPrice.ssdC +
+                    vm.vmHdd*vmPrice.hdd*vmPrice.hddC}} {{vmPrice.c}}</td>
+                <td class="button"><button (click)="openModal(vm.vmId)" (mouseenter)="vm.isHovered = true"
+                        (mouseleave)="vm.isHovered = false">Edit</button></td>
+            </tr>
+        </table>
+    </div>
+    <app-modal>
+        <div (click)="closeModal()" class="modal-background"></div>
+        <div class="modal-body">
+            <table *ngIf="!modalSettings">
+                <tr>
+                    <th>vmId</th>
+                    <td>{{vmModal.vmId}}</td>
+                </tr>
+                <tr>
+                    <th><label for="vm-name">vmName</label></th>
+                    <td><input id="vm-name" [(ngModel)]="vmModal.vmName" readonly></td>
+                </tr>
+                <tr (click)="openClientDd()">
+                    <th>clientName</th>
+                    <td>{{vmModal.clientName}}</td>
+                </tr>
+                <tr [hidden]="!clientActiveDD">
+                    <th>clientList</th>
+                    <button (click)="setClient()">-</button>
+                    <button *ngFor="let client of clientDd"
+                        (click)="setClient(client.clientId, client.clientName)">{{client.clientName}}</button>
+                </tr>
+                <tr>
+                    <th>fmName</th>
+                    <td>{{vmModal.fmName}}</td>
+                </tr>
+                <tr>
+                    <th><label for="vm-cpu">vmCpu</label></th>
+                    <td><input id="vm-cpu" [(ngModel)]="vmModal.vmCpu" readonly></td>
+                </tr>
+                <tr>
+                    <th><label for="vm-ram">vmRam</label></th>
+                    <td><input id="vm-ram" [(ngModel)]="vmModal.vmRam" readonly></td>
+                </tr>
+                <tr>
+                    <th><label for="vm-ssd">vmSsd</label></th>
+                    <td><input id="vm-ssd" [(ngModel)]="vmModal.vmSsd" readonly></td>
+                </tr>
+                <tr>
+                    <th><label for="vm-hdd">vmHdd</label></th>
+                    <td><input id="vm-hdd" [(ngModel)]="vmModal.vmHdd" readonly></td>
+                </tr>
+                <tr>
+                    <th>vmState</th>
+                    <td>{{vmModal.vmState ? 'Running' : 'Off'}}</td>
+                </tr>
+                <tr>
+                    <th>vmStateAction</th>
+                    <td>
+                        <div class="buttons-in-table">
+                            <button *ngIf="!vmModal.vmState">Power</button>
+                            <button *ngIf="vmModal.vmState">Restart</button>
+                            <button *ngIf="vmModal.vmState">Shutdown</button>
+                            <button *ngIf="vmModal.vmState">Kill</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>vmVer</th>
+                    <td>{{vmModal.vmVer}}</td>
+                </tr>
+                <tr>
+                    <th>vmVerDate</th>
+                    <td>{{vmModal.vmVerDate | date:'dd MMMM yyyy - HH:mm:ss'}}</td>
+                </tr>
+                <tr>
+                    <th><label for="vm-title">vmTitle</label></th>
+                    <td><input id="vm-title" [(ngModel)]="vmModal.vmTitle" maxlength="50"></td>
+                </tr>
+                <tr>
+                    <th><label for="vm-desc">vmDesc</label></th>
+                    <td><textarea id="vm-desc" maxlength="255" rows="3"
+                            [(ngModel)]="vmModal.vmDesc">{{vmModal.vmDesc}}</textarea></td>
+                </tr>
+            </table>
+            <div *ngIf="!modalSettings" class="modal-buttons">
+                <button (click)="saveVm()">Save</button>
+                <button (click)="closeModal()">Close</button>
+            </div>
+
+            <table *ngIf="modalSettings">
+                <tr>
+                    <th><label for="p-vm-cpu">priceCpu</label></th>
+                    <td><input id="p-vm-cpu" style="width: 25px" maxlength="4" [(ngModel)]="vmPrice.cpu"> ₽ / core</td>
+                </tr>
+                <tr>
+                    <th><label for="p-vm-ram">priceRam</label></th>
+                    <td><input id="p-vm-ram" style="width: 25px" maxlength="4" [(ngModel)]="vmPrice.ram"> ₽ / 1GB</td>
+                </tr>
+                <tr>
+                    <th><label for="p-vm-ssd">priceSsd</label></th>
+                    <td><input id="p-vm-ssd" style="width: 25px" maxlength="4" [(ngModel)]="vmPrice.ssd"> ₽ / 10GB</td>
+                </tr>
+                <tr>
+                    <th><label for="p-vm-hdd">priceHdd</label></th>
+                    <td><input id="p-vm-hdd" style="width: 25px" maxlength="4" [(ngModel)]="vmPrice.hdd"> ₽ / 50GB</td>
+                </tr>
+            </table>
+            <div *ngIf="modalSettings" class="modal-buttons">
+                <!-- <button>Save</button> -->
+                <button (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </app-modal>
+</section>

@@ -1,0 +1,55 @@
+<section>
+    <div class="table-container">
+        <table class="header">
+            <tr>
+                <th class="small">ID</th>
+                <th class="medium">Client</th>
+                <th class="medium">Name</th>
+                <th class="medium">IP</th>
+                <th class="small">Price</th>
+                <th class="small">VM</th>
+                <th class="button"><button (click)="openModal('new')">New</button></th>
+            </tr>
+        </table>
+        <table class="content">
+            <tr *ngFor="let fm of fmTable" class="row" [class.selected]="fm.isHovered">
+                <td class="small">{{fm.fmId}}</td>
+                <td class="medium">{{fm.clientName}}</td>
+                <td class="medium">{{fm.fmName}}</td>
+                <td class="medium">{{fm.fmIp}}</td>
+                <td class="small">{{fm.fmPrice}} ₽</td>
+                <td class="small">{{fm.fmVm ? 'TRUE' : 'FALSE' }}</td>
+                <td class="button"><button (click)="openModal(fm.fmId.toString())" (mouseenter)="fm.isHovered = true" (mouseleave)="fm.isHovered = false">Edit</button></td>
+            </tr>
+        </table>
+    </div>
+    <app-modal>
+        <div (click)="closeModal()" class="modal-background"></div>
+        <div class="modal-body">
+          <table>
+            <tr *ngIf="fmModal.fmId > 0"><th>fmId</th><td>{{fmModal.fmId}}</td></tr>
+            <tr><th><label for="fm-name">fmName</label></th><td><input id="fm-name" [(ngModel)]="fmModal.fmName" maxlength="25"></td></tr>
+            <tr (click)="openClientDd()"><th>clientName</th><td>{{fmModal.clientName}}</td></tr>
+            <tr [hidden]="!clientActiveDD">
+              <th>clientList</th>
+              <button (click)="setClient()">-</button>
+              <button *ngFor="let client of clientDd" (click)="setClient(client.clientId, client.clientName)">{{client.clientName}}</button>
+            </tr>
+            <tr><th><label for="fm-ip">fmIp</label></th><td><input id="fm-ip" [(ngModel)]="fmModal.fmIp" maxlength="15"></td></tr>
+            <tr><th><label for="fm-specs">fmSpecs</label></th><td><textarea id="fm-specs" [(ngModel)]="fmModal.fmSpecs" maxlength="255">{{fmModal.fmSpecs}}</textarea></td></tr>
+            <tr><th><label for="fm-desc">fmDesc</label></th><td><textarea id="fm-desc" [(ngModel)]="fmModal.fmDesc" maxlength="255">{{fmModal.fmDesc}}</textarea></tr>
+            <tr><th><label for="fm-price">fmPrice</label></th><td><input id="fm-price" [(ngModel)]="fmModal.fmPrice"></td></tr>
+            <tr><th><label for="fm-vm">fmVm</label></th><td><input style="width: 20px" id="fm-vm" type="checkbox" [(ngModel)]="fmModal.fmVm"></td></tr>
+          </table>
+        </div>
+        <div *ngIf="fmModal.fmId=== 0" class="modal-buttons">
+            <button (click)="newFm()">Add</button>
+            <button (click)="closeModal()">Cancel</button>
+        </div>
+        <div *ngIf="fmModal.fmId !== 0" class="modal-buttons">
+            <button (click)="editFm()">Save</button>
+            <button (click)="delFm()">{{delButtonText}}</button>
+            <button (click)="closeModal()">Close</button>
+        </div>
+    </app-modal>
+</section>

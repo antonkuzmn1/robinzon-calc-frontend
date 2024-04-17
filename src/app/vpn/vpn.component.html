@@ -1,0 +1,59 @@
+<section>
+    <div class="table-container">
+        <table class="header">
+            <tr>
+                <th class="small">ID</th>
+                <th class="medium">Title</th>
+                <th class="medium">Client</th>
+                <th class="medium">Login</th>
+                <th class="medium">IP</th>
+                <th class="small">Type</th>
+                <th class="medium">Server</th>
+                <th class="button"><button (click)="openModal('new')">New</button></th>
+            </tr>
+        </table>
+        <table class="content">
+            <tr *ngFor="let v of vpnTable" class="row" [class.selected]="v.isHovered">
+                <td class="small">{{v.vpnId}}</td>
+                <td class="medium">{{v.vpnTitle}}</td>
+                <td class="medium">{{v.clientName}}</td>
+                <td class="medium">{{v.vpnLogin}}</td>
+                <td class="medium">{{v.vpnIp}}</td>
+                <td class="small">{{v.vpnType}}</td>
+                <td class="medium">{{v.vpnServer}}</td>
+                <td class="button"><button (click)="openModal(v.vpnId.toString())" (mouseenter)="v.isHovered = true" (mouseleave)="v.isHovered = false">Edit</button></td>
+            </tr>
+        </table>
+    </div>
+    <app-modal>
+        <div (click)="closeModal()" class="modal-background"></div>
+        <div class="modal-body">
+          <table>
+            <tr *ngIf="vpnModal.vpnId !== 0"><th>vpnId</th><td>{{vpnModal.vpnId}}</td></tr>
+            <tr (click)="openClientDd()"><th>clientName</th><td>{{vpnModal.clientName}}</td></tr>
+            <tr [hidden]="!clientActiveDD">
+              <th>clientList</th>
+              <button (click)="setClient()">-</button>
+              <button *ngFor="let client of clientDd" (click)="setClient(client.clientId, client.clientName)">{{client.clientName}}</button>
+            </tr>
+            <tr><th><label for="vpn-login">vpnLogin</label></th><td><input id="vpn-login" [(ngModel)]="vpnModal.vpnLogin" maxlength="50"></td></tr>
+            <tr><th><label for="vpn-pass">vpnPass</label></th><td><input id="vpn-pass" [(ngModel)]="vpnModal.vpnPass" maxlength="50"></td></tr>
+            <tr><th><label for="vpn-ip">vpnIp</label></th><td><input id="vpn-ip" [(ngModel)]="vpnModal.vpnIp" maxlength="15"></td></tr>
+            <tr><th><label for="vpn-type">vpnType</label></th><td><input id="vpn-type" [(ngModel)]="vpnModal.vpnType" maxlength="10"></td></tr>
+            <tr><th><label for="vpn-server">vpnServer</label></th><td><input id="vpn-server" [(ngModel)]="vpnModal.vpnServer" maxlength="15"></td></tr>
+            <tr><th><label for="vpn-key">vpnKey</label></th><td><input id="vpn-key" [(ngModel)]="vpnModal.vpnKey" maxlength="50"></td></tr>
+            <tr><th><label for="vpn-title">vpnTitle</label></th><td><input id="vpn-title" [(ngModel)]="vpnModal.vpnTitle" maxlength="50"></td></tr>
+            <tr><th><label for="vpn-descr">vpnDescr</label></th><td><textarea id="vpn-descr" [(ngModel)]="vpnModal.vpnDescr" maxlength="255">{{vpnModal.vpnDescr}}</textarea></td></tr>
+          </table>
+        </div>
+        <div *ngIf="vpnModal.vpnId === 0" class="modal-buttons">
+            <button (click)="newVpn()">Add</button>
+            <button (click)="closeModal()">Cancel</button>
+        </div>
+        <div *ngIf="vpnModal.vpnId !== 0" class="modal-buttons">
+            <button (click)="editVpn()">Save</button>
+            <button (click)="delVpn()">{{delButtonText}}</button>
+            <button (click)="closeModal()">Close</button>
+        </div>
+    </app-modal>
+</section>
