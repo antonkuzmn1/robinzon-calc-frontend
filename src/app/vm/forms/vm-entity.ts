@@ -16,31 +16,19 @@ limitations under the License.
 
 */
 
-import {Component} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import {NavbarComponent} from "./navbar/navbar.component";
-import {AppData} from "./app-data";
-
 /**
- * main container
+ * Main entity for table content
  */
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    NavbarComponent,
-  ],
-  template: `
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-  `,
-  styleUrl: '../assets/styles/components/app.component.sass'
-})
-export class AppComponent {
-  constructor() {
-  }
-
-  vmData: AppData = {modal: null, filter: null}
-
+export class VmEntity {
+    constructor(
+        public id: string = "Loading...",
+        public clientName: string = "Loading...",
+        public name: string = "Loading...",
+        public fmName: string = "Loading...",
+        public cpu: number = 0,
+        public ram: number = 0,
+        public ssd: number = 0,
+        public hdd: number = 0,
+        public state: boolean = false,
+    ) { }
 }

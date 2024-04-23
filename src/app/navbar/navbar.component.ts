@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
-import {MatTab, MatTabContent, MatTabGroup} from "@angular/material/tabs";
 import {SettingsComponent} from "../settings/settings.component";
 import {AuthComponent} from "../auth/auth.component";
 import {VmComponent} from "../vm/vm.component";
@@ -11,10 +10,7 @@ import {VmComponent} from "../vm/vm.component";
   imports: [
     RouterLink,
     RouterLinkActive,
-    MatTabGroup,
-    MatTabContent,
     SettingsComponent,
-    MatTab,
     AuthComponent,
     VmComponent,
   ],
