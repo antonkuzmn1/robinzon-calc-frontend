@@ -1,14 +1,32 @@
-<section>
-  <nav>
-    <a
-      *ngFor="let link of navbarLinks"
-      [routerLink]="link.path"
-      routerLinkActive="active"
-      draggable="false"
-    >
-      {{ link.viewName }}
-    </a>
-  </nav>
-</section>
+<ng-container *ngIf="errorText$.value.length === 0 else error">
+  <ng-container *ngIf="initDone$.value else loading">
+    <section>
+      <nav>
+        <a
+          *ngFor="let link of navbarLinks"
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          draggable="false"
+          matRipple
+        >
+          {{ link.viewName }}
+        </a>
+      </nav>
+    </section>
 
-<router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+  </ng-container>
+</ng-container>
+
+<ng-template #error>
+  <div class="error" matRipple>
+    <p>{{ errorText$.value }}</p>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading" matRipple>
+    <mat-spinner></mat-spinner>
+    <p>{{ loadingStopwatch$.value }} ms</p>
+  </div>
+</ng-template>
