@@ -1,36 +1,12 @@
-import {CommonModule, NgFor, NgIf} from '@angular/common';
-import {Component, HostListener, OnInit} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {Component, HostListener} from '@angular/core';
 
 @Component({
   selector: 'app-print',
   standalone: true,
-  imports: [
-    NgFor,
-    NgIf,
-    CommonModule,
-    FormsModule,
-  ],
-  template: `
-    <section>
-      <div class="main">
-        <h1>{{ screenWidth }}</h1>
-      </div>
-    </section>
-  `,
-  styleUrl: '../../assets/styles/components/print.component.sass'
+  imports: [],
+  templateUrl: './print.component.html',
+  styleUrl: './print.component.sass'
 })
-export class PrintComponent implements OnInit {
-  constructor() {
-  }
+export class PrintComponent {
 
-  screenWidth: number = window.innerWidth;
-
-  ngOnInit(): void {
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
-    this.screenWidth = window.innerWidth;
-  }
 }
