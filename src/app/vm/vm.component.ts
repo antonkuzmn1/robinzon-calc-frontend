@@ -33,7 +33,7 @@ export interface VmEntity {
     MatProgressSpinner
   ],
   templateUrl: './vm.component.html',
-  styleUrl: './vm.component.sass'
+  styleUrl: './vm.component.scss'
 })
 export class VmComponent implements OnInit {
 

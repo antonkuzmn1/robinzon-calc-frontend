@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './modal-new.component.html',
-  styleUrl: './modal-new.component.sass'
+  styleUrl: './modal-new.component.scss'
 })
 export class ModalNewComponent {
 

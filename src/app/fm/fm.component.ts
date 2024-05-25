@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './fm.component.html',
-  styleUrl: './fm.component.sass'
+  styleUrl: './fm.component.scss'
 })
 export class FmComponent {
 

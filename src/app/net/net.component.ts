@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './net.component.html',
-  styleUrl: './net.component.sass'
+  styleUrl: './net.component.scss'
 })
 export class NetComponent {
 

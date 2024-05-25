@@ -5,7 +5,7 @@ import {Component} from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './print.component.html',
-  styleUrl: './print.component.sass'
+  styleUrl: './print.component.scss'
 })
 export class PrintComponent {
 

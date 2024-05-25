@@ -1,0 +1,242 @@
+//
+// Copyright 2024 Anton Kuzmin (http://github.com/antonkuzmn1)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+@import '../../styles/constants';
+
+section {
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: none;
+  transition: background-color 100ms ease-out, backdrop-filter 100ms ease-out;
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(5px);
+  }
+
+  & div.background {
+    display: flex;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    overflow-x: auto;
+
+    & div.content {
+      background-color: $color_brand;
+      //box-shadow: none;
+      min-width: 320px;
+      height: auto;
+      margin: auto;
+      opacity: 0;
+      box-shadow: $shadow;
+      border-radius: 15px;
+
+      transition: opacity 100ms ease-out;
+
+      &.active {
+        opacity: 1;
+      }
+
+      & div.header {
+        padding: 3px;
+        height: 24px;
+        border-radius: 15px 15px 15px 15px;
+        display: flex;
+
+        & button.tab {
+          height: 24px;
+          margin-right: 0;
+          border-radius: 12px;
+          border: none;
+          display: flex;
+          padding: 0 10px;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          line-height: 24px;
+          background-color: $color_brand;
+          color: $color_font_placeholder;
+          box-shadow: none;
+          user-select: none;
+          cursor: pointer;
+
+          transition: background-color 100ms ease-out, color 100ms ease-out, box-shadow 100ms ease-out;
+
+          &:hover {
+            background-color: $color_brand_dark;
+            color: $color_font_placeholder;
+          }
+
+          &:active {
+            background-color: $color_brand_darker;
+            color: black;
+          }
+
+          &.active {
+            background-color: $color_brand_darker;
+            color: black;
+          }
+        }
+
+        & div.tab {
+          position: relative;
+          display: inline-block;
+
+          & button {
+            height: 24px;
+            min-width: 48px;
+            max-width: $width_large;
+            margin-right: 0;
+            border-radius: 12px;
+            border: none;
+            display: flex;
+            padding: 0 10px;
+            justify-content: left;
+            align-items: center;
+            position: relative;
+            line-height: 24px;
+            background-color: $color_brand;
+            color: $color_font_placeholder;
+            box-shadow: none;
+            user-select: none;
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+
+            -webkit-appearance: none;
+            -moz-appearance: none;
+
+            transition: background-color 100ms ease-out, color 100ms ease-out, box-shadow 100ms ease-out;
+
+            &:hover {
+              background-color: $color_brand_dark;
+              color: $color_font_placeholder;
+            }
+
+            &:active {
+              background-color: $color_brand_darker;
+              color: black;
+            }
+
+            &:focus {
+              outline: none;
+            }
+
+            &:active {
+              background-color: $color_brand_darker;
+            }
+
+            &.active {
+              background-color: $color_brand_darker;
+            }
+          }
+
+          & div.tab-content {
+            position: absolute;
+            background-color: $color_brand;
+            min-width: 48px;
+            max-width: $width_large;
+            box-shadow: $shadow;
+            border-radius: 6px;
+            z-index: 1;
+            max-height: 40vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            padding-right: 12px;
+
+            & button {
+              border-radius: 0;
+              min-width: $width_large;
+              max-width: $width_large;
+
+              &.active {
+                background-color: $color_brand_darker;
+              }
+            }
+
+            &::-webkit-scrollbar-track {
+              -webkit-box-shadow: none;
+              background-color: #00000000;
+            }
+
+            &::-webkit-scrollbar {
+              width: 12px;
+              background-color: #00000000;
+            }
+
+            &::-webkit-scrollbar-thumb {
+              border-radius: 12px;
+              -webkit-box-shadow: none;
+              background-color: $color_brand_dark;
+              cursor: pointer;
+
+              &:hover {
+                background-color: $color_brand_darker;
+              }
+
+              &:active {
+                background-color: $color_font_placeholder;
+              }
+            }
+          }
+        }
+
+        & button.close {
+          height: 24px;
+          min-width: 24px;
+          max-width: 24px;
+          margin-left: auto;
+          border-radius: 12px;
+          border: none;
+          display: flex;
+          padding: 0;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          line-height: 24px;
+          background-color: $color_brand;
+          color: $color_font_placeholder;
+          box-shadow: none;
+          user-select: none;
+          cursor: pointer;
+
+          transition: background-color 100ms ease-out, color 100ms ease-out, box-shadow 100ms ease-out;
+
+          &:hover {
+            background-color: $color_brand_dark;
+            color: $color_font_placeholder;
+          }
+
+          &:active {
+            background-color: $color_brand_darker;
+            color: black;
+          }
+        }
+      }
+    }
+  }
+}

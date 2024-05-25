@@ -16,7 +16,7 @@ import {ModalService} from "./modal.service";
     NgForOf
   ],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.sass'
+  styleUrl: './modal.component.scss'
 })
 export class ModalComponent implements OnInit {
 

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './account.component.html',
-  styleUrl: './account.component.sass'
+  styleUrl: './account.component.scss'
 })
 export class AccountComponent {
 

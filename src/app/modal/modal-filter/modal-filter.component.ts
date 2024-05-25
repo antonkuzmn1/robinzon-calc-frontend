@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './modal-filter.component.html',
-  styleUrl: './modal-filter.component.sass'
+  styleUrl: './modal-filter.component.scss'
 })
 export class ModalFilterComponent {
 

@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './vpn.component.html',
-  styleUrl: './vpn.component.sass'
+  styleUrl: './vpn.component.scss'
 })
 export class VpnComponent {
 

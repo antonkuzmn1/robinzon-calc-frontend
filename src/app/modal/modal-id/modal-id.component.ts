@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './modal-id.component.html',
-  styleUrl: './modal-id.component.sass'
+  styleUrl: './modal-id.component.scss'
 })
 export class ModalIdComponent {
 
