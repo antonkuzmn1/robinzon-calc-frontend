@@ -1,0 +1,59 @@
+<section>
+  <router-outlet></router-outlet>
+
+  <ng-container *ngIf="errorText$.value.length === 0 else error">
+    <ng-container *ngIf="initDone$.value else loading">
+      <div>
+        <table class='header'>
+          <tr>
+            <th class='button'>
+              <button (click)="filter()">Action</button>
+            </th>
+
+            <th
+              *ngFor="let column of tableColumns"
+              [class]="column.class"
+            >
+              <div>
+                <button (click)="sortTable(column.field, true)">▲</button>
+                <button (click)="sortTable(column.field, false)">▼</button>
+                <div>{{ column.viewName }}</div>
+              </div>
+            </th>
+          </tr>
+        </table>
+
+        <table class='content'>
+          <tr *ngFor="let row of tableRows$ | async">
+            <td class='button'>
+              <button (click)="edit(row)">Edit</button>
+            </td>
+
+            <td
+              *ngFor="let column of tableColumns"
+              [class]="column.class"
+            >
+              <div>
+                {{ getFieldValue(row, column.field) }}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #error>
+    <div class="error">
+      <p>{{ errorText$.value }}</p>
+    </div>
+  </ng-template>
+
+  <ng-template #loading>
+    <div class="loading">
+      <mat-spinner></mat-spinner>
+      <p>{{ loadingStopwatch$.value }} ms</p>
+    </div>
+  </ng-template>
+
+</section>

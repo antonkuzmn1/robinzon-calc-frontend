@@ -19,16 +19,16 @@ limitations under the License.
 /**
  * Main entity for table content
  */
-export class VmEntity {
-    constructor(
-        public id: string = "Loading...",
-        public clientName: string = "Loading...",
-        public name: string = "Loading...",
-        public fmName: string = "Loading...",
-        public cpu: number = 0,
-        public ram: number = 0,
-        public ssd: number = 0,
-        public hdd: number = 0,
-        public state: boolean = false,
-    ) { }
-}
+// export class VmEntity {
+//   constructor(
+//     public id: string = "Loading...",
+//     public clientName: string = "Loading...",
+//     public name: string = "Loading...",
+//     public fmName: string = "Loading...",
+//     public cpu: number = 0,
+//     public ram: number = 0,
+//     public ssd: number = 0,
+//     public hdd: number = 0,
+//     public state: boolean = false,
+//   ) { }
+// }

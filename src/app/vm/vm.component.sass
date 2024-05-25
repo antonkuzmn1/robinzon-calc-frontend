@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@import '../constants'
+@import '../../styles/constants'
 
 section
   margin-left: 0
@@ -24,36 +24,35 @@ section
   height: calc(100vh - $height_medium)
   overflow: auto
 
-  div
+  & > div
     margin-left: auto
     margin-right: auto
     width: min-content
     box-shadow: $shadow
 
-    table
+    & > table
       background-color: white
       border-collapse: collapse
 
       &.header
-        //box-shadow: $shadow
         position: sticky
         top: 0
 
-        tr
-          th
+        & > tr
+          & > th
             width: $width_medium
-            padding: 0 20px 0 0
+            padding: 0 0 0 0
             font-weight: normal
             border: 1px solid $color_brand_dark
             user-select: none
 
-            & div
+            & > div
               display: flex
               width: 100%
               height: calc($height_small + 1px)
               box-shadow: none
 
-              & button
+              & > button
                 min-width: $height_small
                 max-width: $height_small
                 padding: 0
@@ -72,36 +71,47 @@ section
                   background-color: $color_brand_darker
                   color: black
 
-              & div
+              & > div
                 margin-left: 5px
                 background-color: #ffffff00
+                font-family: $font_family
+                font-weight: normal
+                font-size: $font_size_medium
+                display: flex
+                align-items: center
+                justify-content: left
                 box-shadow: none
 
             &.large
               min-width: $width_large
+              max-width: $width_large
 
             &.small
               min-width: $width_small
+              max-width: $width_small
 
             &.button
-              width: 100%
+              min-width: 60px
+              max-width: 60px
               padding: 0
 
-              button
+              & > button
                 height: calc($height_small + 1px)
                 width: 100%
                 border: none
                 background-color: $color_brand
+                font-family: $font_family
+                font-weight: normal
+                font-size: $font_size_medium
+                display: flex
+                align-items: center
+                justify-content: center
                 cursor: pointer
 
                 transition: background-color 100ms ease-out
 
                 &:hover
                   background-color: $color_brand_dark
-
-                //&:focus
-                //  outline: none
-                //  background-color: $color_brand_dark
 
                 &:active
                   background-color: $color_brand_darker
@@ -111,18 +121,24 @@ section
 
       &.content
 
-        tr
+        & > tr
 
           transition: background-color 100ms ease-out
 
           &:hover
             background-color: $color_brand_dark
 
-          td
+          & > td
             min-width: $width_medium
-            padding: 0 10px
+            padding: 0 0 0 0
             border: 1px solid $color_brand_dark
             border-top: none
+            font-family: $font_family
+            font-weight: normal
+            font-size: $font_size_medium
+
+            & > div
+              margin: auto auto auto 5px
 
             &.large
               min-width: $width_large
@@ -132,14 +148,21 @@ section
 
             &.button
               min-width: 60px
+              max-width: 60px
               padding: 0
 
-              button
+              & > button
                 height: $height_small
                 width: 60px
                 border: none
                 background-color: #00000000
                 cursor: pointer
+                font-family: $font_family
+                font-weight: normal
+                font-size: $font_size_medium
+                display: flex
+                align-items: center
+                justify-content: center
                 user-select: none
 
                 transition: background-color 100ms ease-out
@@ -147,12 +170,23 @@ section
                 &:hover
                   background-color: $color_brand_dark
 
-                //&:focus
-                //  outline: none
-                //  background-color: $color_brand_dark
-
                 &:active
                   background-color: $color_brand_darker
 
                 &.active
                   background-color: $color_brand_darker
+
+  & > .error,
+  & > .loading
+    height: 100%
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    position: relative
+
+    & > mat-spinner,
+    & > p
+      font-family: monospace
+      position: absolute

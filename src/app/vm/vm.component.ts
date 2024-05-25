@@ -1,124 +1,63 @@
-/*
-
-Copyright 2024 Anton Kuzmin (http://github.com/antonkuzmn1)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-*/
-
 import {Component, OnInit} from '@angular/core';
-import {VmService} from "./vm.service";
-import {VmEntity} from "./forms/vm-entity";
-import {VmRaw} from "./forms/vm-raw";
-import {NgFor} from "@angular/common";
-import {ModalService} from "../modal/modal.service";
-import {RouterOutlet, ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {AppData} from "../app-data";
+import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from "@angular/common";
+import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 import {AppComponent} from "../app.component";
-import {ModalComponent} from "../modal/modal.component";
+import {AppData} from "../app-data";
+import {VmService} from "./vm.service";
+import {VmRaw} from "./forms/vm-raw";
+import {ModalService} from "../modal/modal.service";
+import {BehaviorSubject} from "rxjs";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
-/**
- * VM table app container
- */
+export interface VmEntity {
+  id: string,
+  clientName: string,
+  name: string,
+  fmName: string
+  cpu: number,
+  ram: number,
+  ssd: number,
+  hdd: number,
+  state: boolean,
+}
+
 @Component({
-  imports: [
-    NgFor,
-    ModalComponent,
-    RouterOutlet,
-    RouterLink
-  ],
   selector: 'app-vm',
   standalone: true,
-  styleUrl: '../../assets/styles/components/vm.component.sass',
-  template: `
-    <section>
-      <router-outlet></router-outlet>
-      <div>
-        <table class='header'>
-          <tr>
-            <th class='button'>
-              <button (click)="filter()">Action</button>
-            </th>
-            <th class='large'>
-              <div>
-                <button (click)="sortTable('name', true)">▲</button>
-                <button (click)="sortTable('name', false)">▼</button>
-                <div>Name</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('fmName', true)">▲</button>
-                <button (click)="sortTable('fmName', false)">▼</button>
-                <div>Host</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('cpu', true)">▲</button>
-                <button (click)="sortTable('cpu', false)">▼</button>
-                <div>CPU</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('ram', true)">▲</button>
-                <button (click)="sortTable('ram', false)">▼</button>
-                <div>RAM</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('ssd', true)">▲</button>
-                <button (click)="sortTable('ssd', false)">▼</button>
-                <div>SSD</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('hdd', true)">▲</button>
-                <button (click)="sortTable('hdd', false)">▼</button>
-                <div>HDD</div>
-              </div>
-            </th>
-            <th class='small'>
-              <div>
-                <button (click)="sortTable('state', true)">▲</button>
-                <button (click)="sortTable('state', false)">▼</button>
-                <div>State</div>
-              </div>
-            </th>
-          </tr>
-        </table>
-        <table class='content'>
-          <tr *ngFor="let vm of vmList">
-            <td class='button'>
-              <button (click)="edit(vm)">Edit</button>
-            </td>
-            <td class='large'>{{ vm.name }}</td>
-            <td class='small'>{{ vm.fmName }}</td>
-            <td class='small'>{{ vm.cpu }}</td>
-            <td class='small'>{{ vm.ram }}</td>
-            <td class='small'>{{ vm.ssd }}</td>
-            <td class='small'>{{ vm.hdd }}</td>
-            <td class='small'>{{ vm.state ? 'Running' : 'Off' }}</td>
-          </tr>
-        </table>
-      </div>
-    </section>
-  `,
+  imports: [
+    NgForOf,
+    RouterOutlet,
+    KeyValuePipe,
+    AsyncPipe,
+    NgIf,
+    MatProgressSpinner
+  ],
+  templateUrl: './vm.component.html',
+  styleUrl: './vm.component.sass'
 })
 export class VmComponent implements OnInit {
+
+  loadingStopwatch$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  initDone$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  errorText$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+
+  tableColumns: {
+    class: 'large' | 'medium' | 'small',
+    viewName: string,
+    field: string
+  }[] = [
+    {class: 'large', viewName: 'Name', field: 'name'},
+    {class: 'small', viewName: 'Host', field: 'fmName'},
+    {class: 'small', viewName: 'CPU', field: 'cpu'},
+    {class: 'small', viewName: 'RAM', field: 'ram'},
+    {class: 'small', viewName: 'SSD', field: 'ssd'},
+    {class: 'small', viewName: 'HDD', field: 'hdd'},
+    {class: 'small', viewName: 'State', field: 'state'},
+  ]
+
+  tableRows$: BehaviorSubject<VmEntity[]> = new BehaviorSubject<VmEntity[]>([]);
+
   constructor(
     private vmService: VmService,
     private modalService: ModalService,
@@ -126,16 +65,23 @@ export class VmComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
   ) {
+    this.fragmentManager();
+
+    const intervalId: number = setInterval((): void => {
+      const next: number = this.loadingStopwatch$.value + 1;
+      this.loadingStopwatch$.next(next);
+
+      if (next >= 500) {
+        this.errorText$.next('loading is too long')
+      }
+
+      if (this.errorText$.value.length > 0 || this.initDone$.value) {
+        clearInterval(intervalId);
+      }
+    }, 1);
   }
 
-  /**
-   * Table data
-   */
-  vmList: VmEntity[] = [new VmEntity()]
-
-  // noinspection JSUnusedGlobalSymbols
   ngOnInit(): void {
-    this.fragmentManager()
   }
 
   fragmentManager(data: AppData | null = null): void {
@@ -170,14 +116,22 @@ export class VmComponent implements OnInit {
     }
   }
 
-  /**
-   * subscribe for table data
-   */
+  getFieldValue(row: any, field: string): any {
+    switch (field) {
+
+      case 'state':
+        return row.state ? 'Running' : 'Off';
+
+      default:
+        return row[field as keyof any];
+    }
+  }
+
   private getTable = (data: AppData = this.app.vmData): void => {
     console.log(data)
     this.vmService.getVmTable().subscribe({
-      next: (data: VmRaw[]) => {
-        this.vmList = data.map(row => {
+      next: (data: VmRaw[]): void => {
+        this.tableRows$.next(data.map((row: VmRaw) => {
           return {
             id: row.id,
             clientName: "",
@@ -189,14 +143,19 @@ export class VmComponent implements OnInit {
             hdd: row.hdd,
             state: row.running
           };
-        });
-        this.modalService.entityList = this.vmList.map((vm: VmEntity): {
+        }));
+        this.modalService.entityList = this.tableRows$.value.map((vm: VmEntity): {
           id: string | number,
           name: string
         } => ({
           id: vm.id,
           name: vm.name
         }))
+
+        this.initDone$.next(true);
+        if (this.errorText$.value.length > 0) {
+          this.errorText$.next('');
+        }
         /*
          then:
           1. set new vmData from backend
@@ -206,6 +165,9 @@ export class VmComponent implements OnInit {
         // const vmDataJson: string = JSON.stringify(vmData)
         // const vmDataEncoded: string = encodeURIComponent(vmDataJson)
         // this.router.navigate([], {fragment: vmDataEncoded})
+      },
+      error: (err: Error): void => {
+        this.errorText$.next(err.message)
       }
     });
   };
@@ -216,26 +178,30 @@ export class VmComponent implements OnInit {
    * @param asc - mark as true if ascending. mark as false if descending
    */
   sortTable(column: string, asc: boolean): void {
+    const table: VmEntity[] = this.tableRows$.value;
     if (asc) {
-      this.vmList.sort((a, b) =>
+      table.sort((a, b): number =>
         (a[column as keyof VmEntity] > b[column as keyof VmEntity]) ? 1 :
           ((b[column as keyof VmEntity] > a[column as keyof VmEntity]) ? -1 : 0)
       );
     } else {
-      this.vmList.sort((a, b) =>
+      table.sort((a, b): number =>
         (a[column as keyof VmEntity] < b[column as keyof VmEntity]) ? 1 :
           ((b[column as keyof VmEntity] < a[column as keyof VmEntity]) ? -1 : 0)
       );
     }
+    this.tableRows$.next(table);
   }
 
   filter(): void {
-    this.router.navigate(['/vm/modal/filter'])
+    this.router.navigate(['/vm/modal/filter']).then((_r: boolean): void => {
+    });
     this.modalService.open()
   }
 
   edit(vm: VmEntity): void {
-    this.router.navigate([`/vm/modal/${vm.id}`])
+    this.router.navigate([`/vm/modal/${vm.id}`]).then((_r: boolean): void => {
+    });
     this.modalService.open()
   }
 
