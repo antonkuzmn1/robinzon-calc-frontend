@@ -19,23 +19,33 @@ limitations under the License.
 import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AppData} from "./app-data";
+import {NgForOf} from "@angular/common";
 
-/**
- * Main container
- */
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    NgForOf
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title: string = 'Calc';
+
+  navbarLinks: {path: string, viewName: string}[] = [
+    {path: '/auth', viewName: 'Auth'},
+    // {path: '/settings', viewName: 'Settings'},
+    {path: '/vm', viewName: 'VM'},
+    // {path: '/fm', viewName: 'FM'},
+    // {path: '/client', viewName: 'Client'},
+    // {path: '/net', viewName: 'Net'},
+    // {path: '/vpn', viewName: 'VPN'},
+    // {path: '/print', viewName: 'Print'},
+  ]
 
   constructor() {
   }
