@@ -15,6 +15,7 @@ export class VmService {
 
   private url: string = 'http://192.168.100.120:8080/api/data/vm';
 
+  // noinspection JSUnusedLocalSymbols
   private headers: { headers: HttpHeaders } = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
