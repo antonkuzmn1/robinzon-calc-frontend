@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-@import '../styles/constants';
+@import '../styles/config';
 
 section {
   box-shadow: $shadow;
@@ -35,7 +35,7 @@ section {
     margin-left: auto;
     margin-right: auto;
     width: min-content;
-    height: $height_medium;
+    height: $navbar_height;
     display: flex;
 
     a {
