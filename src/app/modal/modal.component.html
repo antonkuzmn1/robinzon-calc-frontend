@@ -4,6 +4,8 @@
       class="content"
       [class]="class()"
       (click)="stopPropagation($event)"
+      cdkDrag
+      cdkDragBoundary=".background"
     >
       <div class="header">
         <button

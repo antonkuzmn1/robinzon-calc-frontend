@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {NgForOf} from "@angular/common";
 import {ModalService} from "./modal.service";
+import {CdkDrag} from "@angular/cdk/drag-drop";
 
 /**
  * Based frame for all modal(pop-up) dialog windows
@@ -13,7 +14,8 @@ import {ModalService} from "./modal.service";
     RouterLink,
     RouterOutlet,
     RouterLinkActive,
-    NgForOf
+    NgForOf,
+    CdkDrag
   ],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss'
