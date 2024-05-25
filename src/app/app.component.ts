@@ -17,30 +17,28 @@ limitations under the License.
 */
 
 import {Component} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import {NavbarComponent} from "./navbar/navbar.component";
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AppData} from "./app-data";
 
 /**
- * main container
+ * Main container
  */
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    NavbarComponent,
+    RouterLink,
+    RouterLinkActive
   ],
-  template: `
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-  `,
-  styleUrl: '../assets/styles/components/app.component.sass'
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.sass'
 })
 export class AppComponent {
+  title: string = 'Calc';
+
   constructor() {
   }
 
   vmData: AppData = {modal: null, filter: null}
-
 }
