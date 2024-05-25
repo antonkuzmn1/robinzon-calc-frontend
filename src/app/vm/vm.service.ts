@@ -3,6 +3,23 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {VmRaw} from "./forms/vm-raw";
 
+export interface VmFilter {
+  name: string,
+  cpuFrom: number,
+  cpuTo: number,
+  ramFrom: number,
+  ramTo: number,
+  ssdFrom: number,
+  ssdTo: number,
+  hddFrom: number,
+  hddTo: number,
+  runningTrue: boolean,
+  runningFalse: boolean,
+  fmEntityIdList: number[],
+  title: string,
+  description: string,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,11 +39,8 @@ export class VmService {
     })
   }
 
-  /**
-   * Get table data
-   */
-  getVmTable(): Observable<VmRaw[]> {
-    return this.http.get<VmRaw[]>(this.url)
+  getVmTable(filter: VmFilter): Observable<VmRaw[]> {
+    return this.http.post<VmRaw[]>(this.url, filter, this.headers)
   }
 
   // getVmTable(): Observable<VmEntity[]> { return this.http.post<VmEntity[]>(`${this.url}table`, this.filter.vmFilter, this.headers) }

@@ -3,7 +3,7 @@ import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 import {AppComponent} from "../app.component";
 import {AppData} from "../app-data";
-import {VmService} from "./vm.service";
+import {VmFilter, VmService} from "./vm.service";
 import {VmRaw} from "./forms/vm-raw";
 import {ModalService} from "../modal/modal.service";
 import {BehaviorSubject} from "rxjs";
@@ -38,9 +38,9 @@ export interface VmEntity {
 export class VmComponent implements OnInit {
 
   loadingStopwatch$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
   initDone$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   errorText$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+
 
   tableColumns: {
     class: 'large' | 'medium' | 'small',
@@ -67,11 +67,12 @@ export class VmComponent implements OnInit {
   ) {
     this.fragmentManager();
 
+    // noinspection DuplicatedCode
     const intervalId: number = setInterval((): void => {
       const next: number = this.loadingStopwatch$.value + 1;
       this.loadingStopwatch$.next(next);
 
-      if (next >= 500) {
+      if (next >= 10000) {
         this.errorText$.next('loading is too long')
       }
 
@@ -129,7 +130,23 @@ export class VmComponent implements OnInit {
 
   private getTable = (data: AppData = this.app.vmData): void => {
     console.log(data)
-    this.vmService.getVmTable().subscribe({
+    const filter: VmFilter = {
+      name: '',
+      cpuFrom: 0,
+      cpuTo: 999,
+      ramFrom: 0,
+      ramTo: 999,
+      ssdFrom: 0,
+      ssdTo: 999,
+      hddFrom: 0,
+      hddTo: 999,
+      runningTrue: false,
+      runningFalse: false,
+      fmEntityIdList: [],
+      title: '',
+      description: '',
+    }
+    this.vmService.getVmTable(filter).subscribe({
       next: (data: VmRaw[]): void => {
         this.tableRows$.next(data.map((row: VmRaw) => {
           return {
@@ -144,18 +161,15 @@ export class VmComponent implements OnInit {
             state: row.running
           };
         }));
-        this.modalService.entityList = this.tableRows$.value.map((vm: VmEntity): {
-          id: string | number,
-          name: string
-        } => ({
-          id: vm.id,
-          name: vm.name
-        }))
+        this.sortTable('name', true);
+
+        console.log(this.tableRows$.value.length)
 
         this.initDone$.next(true);
         if (this.errorText$.value.length > 0) {
           this.errorText$.next('');
         }
+
         /*
          then:
           1. set new vmData from backend
@@ -191,6 +205,7 @@ export class VmComponent implements OnInit {
       );
     }
     this.tableRows$.next(table);
+    this.syncModalEntityList();
   }
 
   filter(): void {
@@ -203,6 +218,16 @@ export class VmComponent implements OnInit {
     this.router.navigate([`/vm/modal/${vm.id}`]).then((_r: boolean): void => {
     });
     this.modalService.open()
+  }
+
+  syncModalEntityList(): void {
+    this.modalService.entityList = this.tableRows$.value.map((vm: VmEntity): {
+      id: string | number,
+      name: string
+    } => ({
+      id: vm.id,
+      name: vm.name
+    }))
   }
 
 }
