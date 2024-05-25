@@ -1,0 +1,55 @@
+<section [class]="class()" (click)="close()">
+  <div class="background">
+    <div
+      class="content"
+      [class]="class()"
+      (click)="stopPropagation($event)"
+    >
+      <div class="header">
+        <button
+          (click)="closeDropdown()"
+          routerLinkActive="active"
+          [routerLink]="routerLink + 'filter'"
+          class="tab"
+        >
+          Filter
+        </button>
+
+        <button
+          (click)="closeDropdown()"
+          routerLinkActive="active"
+          [routerLink]="routerLink + 'new'"
+          class="tab"
+        >
+          New
+        </button>
+
+        <div class="tab">
+          <button
+            [class]="classButtonId"
+            (click)="toggleDropdown()"
+            [innerText]="selectButtonText"
+          >
+          </button>
+
+          <div
+            [hidden]="dropdownIsHidden"
+            class="tab-content"
+          >
+            <button
+              *ngFor="let entity of entityList()"
+              routerLinkActive="active"
+              [routerLink]="routerLink + entity.id"
+            >
+              {{ entity.name }}
+            </button>
+          </div>
+        </div>
+
+        <button class="close" (click)="close()">×</button>
+      </div>
+
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</section>

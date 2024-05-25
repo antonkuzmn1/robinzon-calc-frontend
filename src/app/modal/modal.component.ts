@@ -1,62 +1,22 @@
-/*
-
-Copyright 2024 Anton Kuzmin (http://github.com/antonkuzmn1)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-*/
-
 import {Component, OnInit} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {ModalService} from './modal.service';
-import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {NgFor} from '@angular/common';
+import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
+import {NgForOf} from "@angular/common";
+import {ModalService} from "./modal.service";
 
+/**
+ * Based frame for all modal(pop-up) dialog windows
+ */
 @Component({
   selector: 'app-modal',
   standalone: true,
   imports: [
-    FormsModule,
-    RouterOutlet,
     RouterLink,
+    RouterOutlet,
     RouterLinkActive,
-    NgFor
+    NgForOf
   ],
-  template: `
-    <section [class]="class()" (click)="close()">
-      <div class="background">
-        <div class="content" [class]="class()" (click)="stopPropagation($event)">
-          <div class="header">
-            <button routerLinkActive="active" [routerLink]="routerLink + 'filter'" class="tab">Filter</button>
-            <button routerLinkActive="active" [routerLink]="routerLink + 'new'" class="tab">New</button>
-            <div class="tab">
-              <button (click)="toggleDropdown()">{{ entityName() === '' ? 'Select' : entityName() }}
-              </button>
-              <div [hidden]="dropdownIsHidden" class="tab-content">
-                <button *ngFor="let entity of entityList()" routerLinkActive="active"
-                        [routerLink]="routerLink + entity.id">{{ entity.name }}
-                </button>
-              </div>
-            </div>
-            <button class="close" (click)="close()">×</button>
-          </div>
-          <router-outlet></router-outlet>
-          <!--<div class="body" [innerHTML]="content()"></div>-->
-        </div>
-      </div>
-    </section>
-  `,
-  styleUrl: '../../assets/styles/components/modal.component.sass',
+  templateUrl: './modal.component.html',
+  styleUrl: './modal.component.sass'
 })
 export class ModalComponent implements OnInit {
 
@@ -65,11 +25,42 @@ export class ModalComponent implements OnInit {
   }
 
   routerLink: string = ""
+  classButtonId: string = ""
+  selectButtonText: string = "Select"
 
   // noinspection JSUnusedGlobalSymbols
   ngOnInit(): void {
     this.routerLink = this.router.url.replace(/\/modal\/[^/]*/, '') + '/modal/'
-    console.log(this.router.url.split('/')[3])
+
+    this.selectButtonClassController()
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.selectButtonClassController()
+      }
+    });
+  }
+
+  selectButtonClassController(): void {
+    const routeInModal: string = this.router.url.split('/')[3]
+    switch (routeInModal) {
+      case 'filter':
+        this.classButtonId = ''
+        this.selectButtonText = 'Select'
+        break;
+      case 'new':
+        this.classButtonId = ''
+        this.selectButtonText = 'Select'
+        break;
+      default:
+        this.classButtonId = 'active'
+        const timeOut: number = this.modalService.entityList.length === 0 ? 3000 : 0;
+        setTimeout(() => {
+          const vmName: string | undefined = this.modalService.entityList.find(entity => entity.id === routeInModal)?.name
+          if (vmName === undefined || vmName === '') return
+          this.selectButtonText = vmName
+        }, timeOut)
+    }
   }
 
   stopPropagation(event: MouseEvent): void {
@@ -94,6 +85,10 @@ export class ModalComponent implements OnInit {
     this.dropdownIsHidden = !this.dropdownIsHidden
   }
 
+  closeDropdown(): void {
+    this.dropdownIsHidden = true
+  }
+
   entityName(): string {
     return this.modalService.entityName
   }
@@ -101,5 +96,6 @@ export class ModalComponent implements OnInit {
   entityList(): { id: number | string, name: string }[] {
     return this.modalService.entityList
   }
+
 
 }
