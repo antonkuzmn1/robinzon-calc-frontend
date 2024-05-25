@@ -6,8 +6,10 @@
   margin-top: $navbar_height;
   background-color: $color_brand_dark;
   height: calc(100vh - $navbar_height);
-  overflow: auto;
+  overflow: auto
+}
 
+@mixin loading-container {
   & > .error,
   & > .loading {
     height: 100%;
