@@ -83,6 +83,20 @@ section {
               }
             }
 
+            &.enum {
+              min-width: $width_smaller;
+              max-width: $width_smaller;
+
+              & > p {
+                height: fit-content;
+                width: fit-content;
+                margin: auto auto auto auto;
+                font-family: $font_family;
+                font-weight: normal;
+                font-size: $font_size_medium;
+              }
+            }
+
             &.large {
               min-width: $width_large;
               max-width: $width_large;
@@ -149,6 +163,25 @@ section {
 
             & > div {
               margin: auto auto auto 5px;
+
+              &.number {
+                margin: auto 5px auto auto;
+                text-align: right;
+              }
+            }
+
+            &.enum {
+              min-width: $width_smaller;
+              max-width: $width_smaller;
+
+              & > p {
+                height: fit-content;
+                width: fit-content;
+                margin: auto 5px auto auto;
+                font-family: $font_family;
+                font-weight: normal;
+                font-size: $font_size_medium;
+              }
             }
 
             &.large {

@@ -6,6 +6,12 @@
       <div>
         <table class='header'>
           <tr>
+            <th class="enum">
+              <p>
+                  Enum
+              </p>
+            </th>
+
             <th class='button'>
               <button (click)="filter()">Action</button>
             </th>
@@ -24,7 +30,13 @@
         </table>
 
         <table class='content'>
-          <tr *ngFor="let row of tableRows$ | async">
+          <tr *ngFor="let row of tableRows$ | async; let i = index">
+            <td class='enum'>
+              <p>
+                {{ i + 1 }}
+              </p>
+            </td>
+
             <td class='button'>
               <button (click)="edit(row)">Edit</button>
             </td>
@@ -33,7 +45,7 @@
               *ngFor="let column of tableColumns"
               [class]="column.class"
             >
-              <div>
+              <div [class]="column.isNumber ? 'number' : ''">
                 {{ getFieldValue(row, column.field) }}
               </div>
             </td>
