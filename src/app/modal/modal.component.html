@@ -6,6 +6,7 @@
       (click)="stopPropagation($event)"
       cdkDrag
       cdkDragBoundary=".background"
+      [cdkDragStartDelay]="500"
     >
       <div class="header">
         <button
@@ -42,6 +43,7 @@
               *ngFor="let entity of entityList()"
               routerLinkActive="active"
               [routerLink]="routerLink + entity.id"
+              (click)="toggleDropdown()"
             >
               {{ entity.name }}
             </button>
