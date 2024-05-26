@@ -16,13 +16,10 @@ limitations under the License.
 
 */
 
-import {AfterViewInit, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {AppData} from "./app-data";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
-import {BehaviorSubject} from "rxjs";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-root',
@@ -33,19 +30,12 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
     RouterLinkActive,
     NgForOf,
     MatRipple,
-    AsyncPipe,
-    MatProgressSpinner,
-    NgIf
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent {
   title: string = 'Calc';
-
-  loadingStopwatch$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  initDone$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  errorText$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   navbarLinks: {path: string, viewName: string}[] = [
     {path: '/auth', viewName: 'Auth'},
@@ -58,30 +48,4 @@ export class AppComponent implements AfterViewInit {
     // {path: '/print', viewName: 'Print'},
   ]
 
-  vmData: AppData = {modal: null, filter: null}
-
-  constructor() {
-    // noinspection DuplicatedCode
-    const intervalId: number = setInterval((): void => {
-      const next: number = this.loadingStopwatch$.value + 1;
-      this.loadingStopwatch$.next(next);
-
-      if (next >= 10000) {
-        this.errorText$.next('loading is too long')
-      }
-
-      if (this.errorText$.value.length > 0 || this.initDone$.value) {
-        clearInterval(intervalId);
-      }
-    }, 1);
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout((): void => {
-      this.initDone$.next(true);
-      if (this.errorText$.value.length > 0) {
-        this.errorText$.next('');
-      }
-    }, 0);
-  }
 }
