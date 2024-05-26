@@ -20,33 +20,16 @@ import {Routes} from '@angular/router';
 import {AccountComponent} from "./account/account.component";
 import {SettingsComponent} from "./settings/settings.component";
 import {VmComponent} from "./vm/vm.component";
-import {ModalComponent} from "./modal/modal.component";
-import {ModalFilterComponent} from "./modal/modal-filter/modal-filter.component";
-import {ModalNewComponent} from "./modal/modal-new/modal-new.component";
-import {ModalIdComponent} from "./modal/modal-id/modal-id.component";
 import {FmComponent} from "./fm/fm.component";
 import {ClientComponent} from "./client/client.component";
 import {NetComponent} from "./net/net.component";
 import {VpnComponent} from "./vpn/vpn.component";
 import {PrintComponent} from "./print/print.component";
 
-/**
- * Standard router
- */
 export const routes: Routes = [
   {path: 'auth', component: AccountComponent},
   {path: 'settings', component: SettingsComponent},
-  {
-    path: 'vm', component: VmComponent, children: [
-      {
-        path: 'modal', component: ModalComponent, children: [
-          {path: 'filter', component: ModalFilterComponent},
-          {path: 'new', component: ModalNewComponent},
-          {path: ':id', component: ModalIdComponent}
-        ]
-      }
-    ]
-  },
+  {path: 'vm', component: VmComponent},
   {path: 'fm', component: FmComponent},
   {path: 'client', component: ClientComponent},
   {path: 'net', component: NetComponent},
