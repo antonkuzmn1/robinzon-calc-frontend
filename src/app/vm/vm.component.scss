@@ -157,9 +157,10 @@ section {
             padding: 0 0 0 0;
             border: 1px solid $color_brand_dark;
             border-top: none;
-            font-family: $font_family;
+            //font-family: $font_family;
+            font-family: monospace;
             font-weight: normal;
-            font-size: $font_size_medium;
+            font-size: $font_size_small;
 
             & > div {
               margin: auto auto auto 5px;
@@ -178,9 +179,6 @@ section {
                 height: fit-content;
                 width: fit-content;
                 margin: auto 5px auto auto;
-                font-family: $font_family;
-                font-weight: normal;
-                font-size: $font_size_medium;
               }
             }
 
@@ -203,9 +201,9 @@ section {
                 border: none;
                 background-color: #00000000;
                 cursor: pointer;
-                font-family: $font_family;
+                font-family: monospace;
                 font-weight: normal;
-                font-size: $font_size_medium;
+                font-size: $font_size_small;
                 display: flex;
                 align-items: center;
                 justify-content: center;

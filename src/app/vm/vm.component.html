@@ -1,5 +1,8 @@
 <section>
-  <router-outlet></router-outlet>
+  <app-modal
+    [hidden]="!modalIsOpened"
+  >
+  </app-modal>
 
   <ng-container *ngIf="errorText$.value.length === 0 else error">
     <ng-container *ngIf="initDone$.value else loading">
@@ -7,9 +10,7 @@
         <table class='header'>
           <tr>
             <th class="enum">
-              <p>
-                  Enum
-              </p>
+              <p>Enum</p>
             </th>
 
             <th class='button'>

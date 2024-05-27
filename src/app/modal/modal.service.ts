@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
+
+  modalIsOpened$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private router: Router) {
   }
@@ -16,6 +19,8 @@ export class ModalService {
   content: string = ''
 
   open(): void {
+    this.modalIsOpened$.next(true)
+
     this.varClass = ''
     setTimeout((): void => {
       this.varClass = 'active'
@@ -23,12 +28,13 @@ export class ModalService {
   }
 
   close(): void {
+    this.modalIsOpened$.next(false);
+
     this.varClass = ''
-    setTimeout((): void => {
-      this.router.navigateByUrl(this.router.url.replace(/\/modal\/[^/]*/, ''))
-      this.content = ''
-      this.entityName = ''
-    }, 101)
+  }
+
+  getModalStatus() {
+    return this.modalIsOpened$.asObservable();
   }
 
 }
